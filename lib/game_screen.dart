@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:loop_line/logic.dart'; // Import the Logic class.
+import 'package:loop_line/logic.dart';
+import 'package:confetti/confetti.dart';
 
 class GameScreen extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class _GameScreenState extends State<GameScreen>
   late Animation<double> _rotationAnimation;
 
   Logic logic = Logic();
+  late ConfettiController _confettiController;
 
   @override
   void initState() {
@@ -28,11 +30,15 @@ class _GameScreenState extends State<GameScreen>
     );
     _rotationAnimation =
         Tween<double>(begin: 0.0, end: -3.14 / 2).animate(_controller);
+
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 5));
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _confettiController.dispose();
     super.dispose();
   }
 
@@ -71,19 +77,9 @@ class _GameScreenState extends State<GameScreen>
     });
   }
 
-  bool isBoardFull() {
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-        if (board[i][j] == 0) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
   void showWinMessage(int player) {
     String playerColor = player == 1 ? "RED" : "BLUE";
+    _confettiController.play(); // Start confetti animation on win
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -119,57 +115,74 @@ class _GameScreenState extends State<GameScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("LoopLine")),
+      appBar: AppBar(title: const Text("LoopLine")),
       body: Stack(
         children: [
           Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.width * 0.9,
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 4.0,
-                      crossAxisSpacing: 4.0,
-                    ),
-                    itemCount: 16,
-                    itemBuilder: (context, index) {
-                      int i = index ~/ 4;
-                      int j = index % 4;
-                      return GestureDetector(
-                        onTap: () => placeBall(i, j),
-                        child: Container(
-                          color: Colors.grey[300],
-                          child: Center(
-                            child: board[i][j] == 0
-                                ? null
-                                : board[i][j] == 1
-                                    ? const CircleAvatar(
-                                        radius: 20,
-                                        backgroundColor: Colors.red,
-                                      )
-                                    : const CircleAvatar(
-                                        radius: 20,
-                                        backgroundColor: Colors.blue,
-                                      ),
-                          ),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    int crossAxisCount = constraints.maxWidth > 600 ? 5 : 4;
+                    return SizedBox(
+                      width: constraints.maxWidth * 0.9,
+                      height: constraints.maxWidth * 0.9,
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisSpacing: 4.0,
+                          crossAxisSpacing: 4.0,
                         ),
-                      );
-                    },
-                  ),
+                        itemCount: 16,
+                        itemBuilder: (context, index) {
+                          int i = index ~/ crossAxisCount;
+                          int j = index % crossAxisCount;
+                          return GestureDetector(
+                            onTap: () => placeBall(i, j),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.black.withOpacity(0.2),
+                                    width: 1),
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.grey[300],
+                              ),
+                              child: Center(
+                                child: board[i][j] == 0
+                                    ? null
+                                    : board[i][j] == 1
+                                        ? const CircleAvatar(
+                                            radius: 20,
+                                            backgroundColor: Colors.red,
+                                          )
+                                        : const CircleAvatar(
+                                            radius: 20,
+                                            backgroundColor: Colors.blue,
+                                          ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
           ),
           // Rotating overlay
           if (isRotating)
-            Center(
+            const Center(
               child: CircularProgressIndicator(),
+            ),
+          if (gameWon)
+            ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirectionality: BlastDirectionality.explosive,
+              numberOfParticles: 100,
+              gravity: 0.5,
             ),
         ],
       ),
