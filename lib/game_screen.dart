@@ -150,6 +150,18 @@ class _GameScreenState extends State<GameScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: Text(
+                    '${currentPlayer == 1 ? 'RED' : 'BLUE'}, Your Turn',
+                    style: TextStyle(
+                      fontFamily: "SourGummy",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 30,
+                      color: currentPlayer == 1 ? Colors.red : Colors.blue,
+                    ),
+                  ),
+                ),
                 LayoutBuilder(
                   builder: (context, constraints) {
                     int crossAxisCount = constraints.maxWidth > 600 ? 5 : 4;
