@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loop_line/pages/game_screen.dart';
+import 'package:loop_line/pages/help.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -44,7 +45,12 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HelpPage(),
+                  ),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueGrey[80],
                 ),
