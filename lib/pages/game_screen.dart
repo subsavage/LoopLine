@@ -45,26 +45,32 @@ class _GameScreenState extends State<GameScreen>
         board[i][j] = currentPlayer;
       });
 
-      // Check for win right after placing the ball
       if (logic.checkWinningCondition(board, currentPlayer)) {
         setState(() {
           gameWon = true;
-          _timer?.cancel(); // Stop the timer when the game is over
+          _timer?.cancel();
           showWinMessage(currentPlayer);
         });
-        return; // Exit if the game is won, no need to rotate
+        return;
       }
 
-      // Start the timer again for the next move
       _timer?.cancel();
       startTimer();
 
-      // Delay and rotate if no one has won
       await Future.delayed(const Duration(milliseconds: 300));
       setState(() => isRotating = true);
       await showRotatingOverlay();
 
       rotateBoard();
+
+      if (logic.checkWinningCondition(board, currentPlayer)) {
+        setState(() {
+          gameWon = true;
+          _timer?.cancel();
+          showWinMessage(currentPlayer);
+        });
+        return;
+      }
 
       setState(() {
         isRotating = false;
