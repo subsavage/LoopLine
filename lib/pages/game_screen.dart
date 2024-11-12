@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:loop_line/logic.dart';
+import 'package:loop_line/logic/logic.dart';
 import 'package:confetti/confetti.dart';
 
 class GameScreen extends StatefulWidget {
