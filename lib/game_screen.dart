@@ -21,11 +21,14 @@ class _GameScreenState extends State<GameScreen>
   Logic logic = Logic();
   late ConfettiController _confettiController;
 
+  Timer? _timer;
+  int _remainingTime = 15;
+
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
     _rotationAnimation =
@@ -33,12 +36,15 @@ class _GameScreenState extends State<GameScreen>
 
     _confettiController =
         ConfettiController(duration: const Duration(seconds: 5));
+
+    startTimer();
   }
 
   @override
   void dispose() {
     _controller.dispose();
     _confettiController.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -47,6 +53,9 @@ class _GameScreenState extends State<GameScreen>
       setState(() {
         board[i][j] = currentPlayer;
       });
+
+      _timer?.cancel();
+      startTimer();
 
       await Future.delayed(const Duration(milliseconds: 300));
 
@@ -79,7 +88,7 @@ class _GameScreenState extends State<GameScreen>
 
   void showWinMessage(int player) {
     String playerColor = player == 1 ? "RED" : "BLUE";
-    _confettiController.play(); // Start confetti animation on win
+    _confettiController.play();
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -125,6 +134,24 @@ class _GameScreenState extends State<GameScreen>
       currentPlayer = 1;
       gameWon = false;
     });
+    startTimer();
+  }
+
+  void startTimer() {
+    _remainingTime = 10;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingTime > 0) {
+        setState(() {
+          _remainingTime--;
+        });
+      } else {
+        rotateBoard();
+        setState(() {
+          currentPlayer = currentPlayer == 1 ? 2 : 1;
+          _remainingTime = 10;
+        });
+      }
+    });
   }
 
   @override
@@ -159,6 +186,17 @@ class _GameScreenState extends State<GameScreen>
                       fontWeight: FontWeight.w600,
                       fontSize: 30,
                       color: currentPlayer == 1 ? Colors.red : Colors.blue,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: Text(
+                    'Time Left: $_remainingTime',
+                    style: const TextStyle(
+                      fontFamily: "SourGummy",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 24,
                     ),
                   ),
                 ),
