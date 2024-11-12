@@ -11,12 +11,11 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen>
     with SingleTickerProviderStateMixin {
   List<List<int>> board = List.generate(4, (_) => List.generate(4, (_) => 0));
+  List<List<double>> rotationAngles =
+      List.generate(4, (_) => List.generate(4, (_) => 0.0));
   int currentPlayer = 1;
   bool gameWon = false;
   bool isRotating = false;
-
-  late AnimationController _controller;
-  late Animation<double> _rotationAnimation;
 
   Logic logic = Logic();
   late ConfettiController _confettiController;
@@ -27,13 +26,6 @@ class _GameScreenState extends State<GameScreen>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-    _rotationAnimation =
-        Tween<double>(begin: 0.0, end: -3.14 / 2).animate(_controller);
-
     _confettiController =
         ConfettiController(duration: const Duration(seconds: 5));
 
@@ -42,7 +34,6 @@ class _GameScreenState extends State<GameScreen>
 
   @override
   void dispose() {
-    _controller.dispose();
     _confettiController.dispose();
     _timer?.cancel();
     super.dispose();
@@ -54,11 +45,22 @@ class _GameScreenState extends State<GameScreen>
         board[i][j] = currentPlayer;
       });
 
+      // Check for win right after placing the ball
+      if (logic.checkWinningCondition(board, currentPlayer)) {
+        setState(() {
+          gameWon = true;
+          _timer?.cancel(); // Stop the timer when the game is over
+          showWinMessage(currentPlayer);
+        });
+        return; // Exit if the game is won, no need to rotate
+      }
+
+      // Start the timer again for the next move
       _timer?.cancel();
       startTimer();
 
+      // Delay and rotate if no one has won
       await Future.delayed(const Duration(milliseconds: 300));
-
       setState(() => isRotating = true);
       await showRotatingOverlay();
 
@@ -66,12 +68,7 @@ class _GameScreenState extends State<GameScreen>
 
       setState(() {
         isRotating = false;
-        if (logic.checkWinningCondition(board, currentPlayer)) {
-          gameWon = true;
-          showWinMessage(currentPlayer);
-        } else {
-          currentPlayer = currentPlayer == 1 ? 2 : 1;
-        }
+        currentPlayer = currentPlayer == 1 ? 2 : 1;
       });
     }
   }
@@ -83,6 +80,11 @@ class _GameScreenState extends State<GameScreen>
   void rotateBoard() {
     setState(() {
       board = logic.rotateAnticlockwise(board);
+      for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+          rotationAngles[i][j] = (rotationAngles[i][j] + 90) % 360;
+        }
+      }
     });
   }
 
@@ -106,7 +108,7 @@ class _GameScreenState extends State<GameScreen>
             color: player == 1 ? Colors.red : Colors.blue,
             fontFamily: "SourGummy",
             fontWeight: FontWeight.w600,
-            fontSize: 50,
+            fontSize: 45,
           ),
         ),
         actions: [
@@ -229,15 +231,16 @@ class _GameScreenState extends State<GameScreen>
                               child: Center(
                                 child: board[i][j] == 0
                                     ? null
-                                    : board[i][j] == 1
-                                        ? const CircleAvatar(
-                                            radius: 20,
-                                            backgroundColor: Colors.red,
-                                          )
-                                        : const CircleAvatar(
-                                            radius: 20,
-                                            backgroundColor: Colors.blue,
-                                          ),
+                                    : RotationTransition(
+                                        turns: AlwaysStoppedAnimation(
+                                            rotationAngles[i][j] / (2 * 3.14)),
+                                        child: CircleAvatar(
+                                          radius: 20,
+                                          backgroundColor: board[i][j] == 1
+                                              ? Colors.red
+                                              : Colors.blue,
+                                        ),
+                                      ),
                               ),
                             ),
                           );
@@ -249,7 +252,6 @@ class _GameScreenState extends State<GameScreen>
               ],
             ),
           ),
-          // Rotating overlay
           if (isRotating)
             const Center(
               child: CircularProgressIndicator(),
