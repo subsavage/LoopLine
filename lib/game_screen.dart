@@ -84,11 +84,20 @@ class _GameScreenState extends State<GameScreen>
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        title: const Text("Game Over"),
+        title: const Text(
+          "Game Over",
+          style: TextStyle(
+            fontFamily: "SourGummy",
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         content: Text(
           "$playerColor WINS!!!",
           style: TextStyle(
             color: player == 1 ? Colors.red : Colors.blue,
+            fontFamily: "SourGummy",
+            fontWeight: FontWeight.w600,
+            fontSize: 50,
           ),
         ),
         actions: [
@@ -97,7 +106,13 @@ class _GameScreenState extends State<GameScreen>
               Navigator.of(context).pop();
               resetGame();
             },
-            child: const Text("Play Again"),
+            child: const Text(
+              "Play Again",
+              style: TextStyle(
+                fontFamily: "SourGummy",
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
@@ -115,7 +130,19 @@ class _GameScreenState extends State<GameScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("LoopLine")),
+      backgroundColor: Colors.blueGrey[100],
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          "LoopLine",
+          style: TextStyle(
+            fontFamily: "SourGummy",
+            fontWeight: FontWeight.w600,
+            fontSize: 35,
+          ),
+        ),
+        backgroundColor: Colors.blueGrey[100],
+      ),
       body: Stack(
         children: [
           Center(
