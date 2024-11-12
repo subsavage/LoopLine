@@ -1,34 +1,31 @@
 class Logic {
   List<List<int>> rotateAnticlockwise(List<List<int>> matrix) {
     int n = matrix.length;
-    List<List<int>> rotatedMatrix =
-        List.generate(n, (_) => List.from(matrix[_]));
+    List<List<int>> rotatedMatrix = List.generate(n, (_) => List.filled(n, 0));
 
-    int temp = rotatedMatrix[1][1];
-    rotatedMatrix[1][1] = rotatedMatrix[1][2];
-    rotatedMatrix[1][2] = rotatedMatrix[2][2];
-    rotatedMatrix[2][2] = rotatedMatrix[2][1];
-    rotatedMatrix[2][1] = temp;
-
-    int tempOuter = rotatedMatrix[0][0];
-
-    for (int i = 0; i < 3; i++) {
-      rotatedMatrix[i][0] = rotatedMatrix[i + 1][0];
+    for (int i = 0; i < n; i++) {
+      if (i == 0) {
+        for (int j = 0; j < n - 1; j++) {
+          rotatedMatrix[0][j] = matrix[0][j + 1];
+        }
+        rotatedMatrix[0][n - 1] = matrix[1][n - 1];
+      } else if (i == n - 1) {
+        for (int j = n - 1; j > 0; j--) {
+          rotatedMatrix[n - 1][j] = matrix[n - 1][j - 1];
+        }
+        rotatedMatrix[n - 1][0] = matrix[n - 2][0];
+      } else {
+        rotatedMatrix[i][0] = matrix[i - 1][0];
+        rotatedMatrix[i][n - 1] = matrix[i + 1][n - 1];
+      }
     }
 
-    for (int i = 0; i < 3; i++) {
-      rotatedMatrix[3][i] = rotatedMatrix[3][i + 1];
+    if (n > 2) {
+      rotatedMatrix[1][1] = matrix[1][2];
+      rotatedMatrix[1][2] = matrix[2][2];
+      rotatedMatrix[2][2] = matrix[2][1];
+      rotatedMatrix[2][1] = matrix[1][1];
     }
-
-    for (int i = 3; i > 0; i--) {
-      rotatedMatrix[i][3] = rotatedMatrix[i - 1][3];
-    }
-
-    for (int i = 3; i > 1; i--) {
-      rotatedMatrix[0][i] = rotatedMatrix[0][i - 1];
-    }
-
-    rotatedMatrix[0][1] = tempOuter;
 
     return rotatedMatrix;
   }
@@ -36,7 +33,6 @@ class Logic {
   bool checkWinningCondition(List<List<int>> matrix, int player) {
     int size = 4;
 
-    // Horizontal check for 4 in a row
     for (int i = 0; i < size; i++) {
       for (int j = 0; j <= size - 4; j++) {
         if (matrix[i][j] == player &&
