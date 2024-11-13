@@ -5,6 +5,9 @@ Two players, one 4x4 grid, and a whole lot of marble chaos! In this game, you’
 The goal is simple: be the first to line up four of your marbles in a row horizontal, vertical, or diagonal. Each playe has 15 seconds to play their turn or the marbles will move counterclockwise giving your opponent and advantage.
 
 Strategize, anticipate the spin, and try not to let your opponent get one step ahead. It’s a game of quick thinking, surprising twists, and plenty of fun.
+
+[Download it here](https://drive.google.com/file/d/14WxLbjo4EgbE-LNNZRVVuqRR44ExUTot/view?usp=sharing)
+
 ## Screenshots
 
 <img src="https://github.com/user-attachments/assets/259a4868-c709-4b58-8b2d-8c06c147e29a" width="300" height="600">
