@@ -7,10 +7,7 @@ The goal is simple: be the first to line up four of your marbles in a row horizo
 Strategize, anticipate the spin, and try not to let your opponent get one step ahead. It’s a game of quick thinking, surprising twists, and plenty of fun.
 ## Screenshots
 
-![App Screenshot](https://drive.google.com/file/d/10dJwjk2xoZfYL-LsGU1HF3gxVvCaDtwz/view?usp=drive_link)
-
-![App Screenshot](https://drive.google.com/file/d/1qkBIabSz4-qKoPRlWlZXBF4H8ae_3_MY/view?usp=sharing)
-
-![App Screenshot](https://drive.google.com/file/d/1imHyxUwNDoeY84T6yxvitGStfUCNzfTI/view?usp=sharing)
-
-![App Screenshot](https://drive.google.com/file/d/1bHj70_qHG19zwDuHVa8X9RN8POa022sv/view?usp=sharing)
+![Screenshot_20241113_113831](https://github.com/user-attachments/assets/259a4868-c709-4b58-8b2d-8c06c147e29a)
+![Screenshot_20241113_114954](https://github.com/user-attachments/assets/83414fc0-a92a-41c2-82ee-167a002504f3)
+![Screenshot_20241113_093703](https://github.com/user-attachments/assets/cb8b1f64-c3ed-43e4-acc9-2a6e249a4ff7)
+![Screenshot_20241113_093716](https://github.com/user-attachments/assets/c080ae20-c5f5-4332-aaa0-e087b12621a0)
