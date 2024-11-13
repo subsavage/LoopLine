@@ -1,16 +1,16 @@
-# loop_line
+## LoopLine
 
-A new Flutter project.
+Two players, one 4x4 grid, and a whole lot of marble chaos! In this game, you’ll take turns placing your marbles on the board, but with a twist, every time you finish a turn, all the marbles spin counterclockwise! It’s like playing connect 4 but with marbles that never sit still (and it is a little irritating to be honest).
 
-## Getting Started
+The goal is simple: be the first to line up four of your marbles in a row horizontal, vertical, or diagonal. Each playe has 15 seconds to play their turn or the marbles will move counterclockwise giving your opponent and advantage.
 
-This project is a starting point for a Flutter application.
+Strategize, anticipate the spin, and try not to let your opponent get one step ahead. It’s a game of quick thinking, surprising twists, and plenty of fun.
+## Screenshots
 
-A few resources to get you started if this is your first Flutter project:
+![App Screenshot](https://drive.google.com/file/d/10dJwjk2xoZfYL-LsGU1HF3gxVvCaDtwz/view?usp=drive_link)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![App Screenshot](https://drive.google.com/file/d/1qkBIabSz4-qKoPRlWlZXBF4H8ae_3_MY/view?usp=sharing)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![App Screenshot](https://drive.google.com/file/d/1imHyxUwNDoeY84T6yxvitGStfUCNzfTI/view?usp=sharing)
+
+![App Screenshot](https://drive.google.com/file/d/1bHj70_qHG19zwDuHVa8X9RN8POa022sv/view?usp=sharing)
