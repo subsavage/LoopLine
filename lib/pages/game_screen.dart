@@ -54,6 +54,15 @@ class _GameScreenState extends State<GameScreen>
         return;
       }
 
+      if (isBoardFull() && !gameWon) {
+        setState(() {
+          gameWon = true;
+          _timer?.cancel();
+          showDrawMessage();
+        });
+        return;
+      }
+
       _timer?.cancel();
       startTimer();
 
@@ -77,6 +86,54 @@ class _GameScreenState extends State<GameScreen>
         currentPlayer = currentPlayer == 1 ? 2 : 1;
       });
     }
+  }
+
+  bool isBoardFull() {
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        if (board[i][j] == 0) return false;
+      }
+    }
+    return true;
+  }
+
+  void showDrawMessage() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        title: const Text(
+          "Game Over",
+          style: TextStyle(
+            fontFamily: "SourGummy",
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        content: const Text(
+          "It's a Draw!",
+          style: TextStyle(
+            fontFamily: "SourGummy",
+            fontWeight: FontWeight.w600,
+            fontSize: 45,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              resetGame();
+            },
+            child: const Text(
+              "Play Again",
+              style: TextStyle(
+                fontFamily: "SourGummy",
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> showRotatingOverlay() async {
